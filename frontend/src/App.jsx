@@ -1,96 +1,177 @@
-import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-
+import { useState, useEffect, useCallback } from "react";
 import Header from "./components/Header";
-import Toolbar from "./components/Toolbar";
 import AddProductForm from "./components/AddProductForm";
-import ProductList from "./components/ProductList";
+import ProductCard from "./components/ProductCard";
 import EditModal from "./components/EditModal";
-
 import "./App.css";
+import { ChevronDown,Search, X } from "lucide-react";
+
+
+const API_URL = "http://localhost:5000/api/products";
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState("");
   const [sort, setSort] = useState("");
-  const [editing, setEditing] = useState(null);
+  const [search, setSearch] = useState("");
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch products from backend
-  const fetchProducts = async (currentQuery = query, currentSort = sort) => {
-    setLoading(true);
-    try {
-      const params = {};
-      if (currentQuery) params.q = currentQuery;
-      if (currentSort) params.sort = currentSort;
-      const { data } = await axios.get("/api/products", { params });
-      setProducts(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-    } finally {
-      setLoading(false);
-    }
+  // ✅ Fetch products (memoized with useCallback)
+  // Replace your fetchProducts with this:
+const fetchProducts = useCallback(async (showLoading = false) => {
+  if (showLoading) setLoading(true); // only show skeleton on first load
+  try {
+    const res = await fetch(
+      `${API_URL}?sort=${sort}&search=${encodeURIComponent(search)}`
+    );
+    const data = await res.json();
+    setProducts(Array.isArray(data) ? data : []);
+  } catch (err) {
+    console.error("Failed to fetch products:", err);
+  } finally {
+    if (showLoading) setLoading(false);
+  }
+}, [sort, search]);
+
+// --------------------
+// useEffect: first load → show skeleton
+useEffect(() => {
+  fetchProducts(true); // first load with skeleton
+}, []);
+
+// --------------------
+// Whenever sort/search changes → fetch but don't reset UI
+useEffect(() => {
+  if (products.length > 0) {
+    fetchProducts(false); // keep showing products, no skeleton blink
+  }
+}, [sort, search]);
+
+  // ✅ CRUD actions
+  const addProduct = async (product) => {
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(product),
+    });
+    fetchProducts();
   };
 
-  // Automatically fetch whenever query or sort changes
-  useEffect(() => {
-    fetchProducts(query, sort);
-  }, [query, sort]);
-const handleSortChange = (newSort) => {
-  const scrollY = window.scrollY; // save scroll
-  setSort(newSort);
-  fetchProducts(query, newSort);  // fetch with new sort
-  window.scrollTo(0, scrollY);    // restore scroll
-};
-  const createProduct = async (payload) => {
-    await axios.post("/api/products", payload);
-    fetchProducts(query, sort);
+  const updateProduct = async (product) => {
+    if (!editingProduct) return;
+    await fetch(`${API_URL}/${editingProduct._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(product),
+    });
+    setEditingProduct(null);
+    fetchProducts();
   };
 
   const deleteProduct = async (id) => {
-    if (!window.confirm("Delete this product?")) return;
-    await axios.delete(`/api/products/${id}`);
-    fetchProducts(query, sort);
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      fetchProducts();
+    }
   };
 
-  const saveEdit = async (updated) => {
-    if (!editing) return;
-    await axios.put(`/api/products/${editing._id}`, updated);
-    setEditing(null);
-    fetchProducts(query, sort);
-  };
-
-  const productsSorted = useMemo(() => products, [products]);
+  // ✅ Edit modal handlers
+  const handleEdit = (product) => setEditingProduct(product);
+  const handleCloseModal = () => setEditingProduct(null);
 
   return (
-    <div className="app-container">
+    <div className="container">
+      {/* Header */}
       <Header />
 
-      <AddProductForm onCreate={createProduct} />
-
-      <Toolbar
-  query={query}
-  sort={sort}
-  onSearch={(newQuery) => {
-    setQuery(newQuery);
-    fetchProducts(newQuery, sort);
-  }}
-  onSortChange={handleSortChange}
-/>
+      {/* Add new product */}
+      <AddProductForm onCreate={addProduct} />
 
 
-      <ProductList
-        products={productsSorted}
-        onDelete={deleteProduct}
-        onEdit={setEditing}
-        loading={loading}
-      />
+      {/* Controls: search + sort */}
+      <div className="controls">
+<div className="searchbar">
+  {/* Search box */}
+  <div className="searchbox">
+  <Search className="search-icon" size={18} />
+  <input
+    type="text"
+    className="search-input"
+    placeholder="Search products..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+  {search && (
+    <button
+      className="searchbox-button"
+      onClick={() => setSearch("")}
+      type="button"
+    >
+      <X size={16} />
+    </button>
+  )}
+</div>
 
-      {editing && (
+
+  {/* Sort select */}
+  <div className="sort-select">
+  <select
+    value={sort}
+    onChange={(e) => setSort(e.target.value)}
+  >
+    <option value="">Sort by</option>
+    <option value="price-asc">Price (Low → High)</option>
+    <option value="price-desc">Price (High → Low)</option>
+  </select>
+  <ChevronDown className="select-caret" size={18} />
+</div>
+
+</div>
+
+      </div>
+
+      {/* Product list */}
+      <div className="products-list">
+        {loading ? (
+          <div className="skeleton">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="card">
+                <div className="card-media shimmer" />
+                <div className="card-body">
+                  <div className="sk-line" />
+                  <div className="sk-line sm" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : products.length > 0 ? (
+          products.map((p) => (
+            <ProductCard
+              key={p._id}
+              product={p}
+              onDelete={deleteProduct}
+              onEdit={handleEdit}
+            />
+          ))
+        ) : (
+          <div className="empty">
+            <div className="empty-emoji">📦</div>
+            <h3>No Products</h3>
+            <p>
+              {search
+                ? `No matches found for "${search}"`
+                : "Try adding a new product!"}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Edit modal */}
+      {editingProduct && (
         <EditModal
-          product={editing}
-          onClose={() => setEditing(null)}
-          onSave={saveEdit}
+          product={editingProduct}
+          onClose={handleCloseModal}
+          onSave={updateProduct}
         />
       )}
     </div>

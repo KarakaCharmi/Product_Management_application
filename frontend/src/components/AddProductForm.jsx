@@ -4,7 +4,18 @@ export default function AddProductForm({ onCreate }) {
 	const [form, setForm] = useState({ name: '', price: '', description: '', category: '' })
 	const [loading, setLoading] = useState(false)
 
-	const categories = ['Shoes', 'Grocery', 'Electronics', 'Clothing', 'Accessories', 'Other']
+	const categories = [
+  'Fashion',
+  'Electronics',
+  'Home & Kitchen',
+  'Sports & Outdoors',
+  'Health & Beauty',
+  'Toys & Games',
+  'Grocery',
+  'Food',
+  'Other'
+];
+
 
 	function handleChange(e) {
 		const { name, value } = e.target

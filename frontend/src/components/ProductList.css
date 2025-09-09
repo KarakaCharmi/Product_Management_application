@@ -6,9 +6,6 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
-  /* Preserve grid width and prevent shifting */
-  width: 100%;
-  box-sizing: border-box;
 }
 
 /* ------------------------------
@@ -19,8 +16,8 @@
   height: 36px;
   border: 3px solid #e5e7eb;
   border-top-color: #60a5fa;
-  border-radius: 50%;
-  margin: 2rem auto;
+  border-radius: 999px;
+  margin: 0 auto;
   animation: spin 0.9s linear infinite;
 }
 
@@ -36,7 +33,6 @@
 .empty {
   text-align: center;
   padding: 2rem;
-  min-height: 200px; /* prevent layout jump */
 }
 
 .empty-emoji {
@@ -44,35 +40,16 @@
   margin-bottom: 0.5rem;
 }
 
-.empty h3 {
-  margin: 0.5rem 0;
-  font-weight: 600;
-}
-
-.empty p {
-  margin: 0;
-  color: var(--muted);
-}
-
 /* ------------------------------
    Skeleton Cards
 ------------------------------ */
-.skeleton {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
-}
-
 .skeleton .card-media {
   background: #eef1f5;
-  border-radius: 10px;
-  height: 140px;
 }
 
 .shimmer {
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
 }
 
 .shimmer::after {
@@ -106,13 +83,74 @@
     transform: translateX(100%);
   }
 }
+/* Parent wrapper for ProductList */
+.products-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* vertical centering */
+  min-height: 60vh; /* adjust as needed */
+  width: 100%;
+}
 
-/* ------------------------------
-   Responsive tweaks
------------------------------- */
-@media (max-width: 640px) {
-  .products-list,
-  .skeleton {
-    grid-template-columns: 1fr;
+/* Empty state */
+.empty.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--panel, #f9f9f9);
+  border-radius: 12px;
+  border: 1px solid var(--border, #e0e0e0);
+  width: 100%;
+  max-width: 400px; /* optional: keeps panel compact */
+}
+
+/* Emoji */
+.empty-emoji {
+  font-size: 50px;
+  margin-bottom: 1rem;
+}
+
+/* Title */
+.empty h3 {
+  font-size: 20px;
+  margin-bottom: 0.5rem;
+}
+
+/* Description */
+.empty p {
+  color: var(--muted, #555);
+  font-size: 14px;
+}
+
+/* Loader */
+.loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
+.loader-text {
+  margin-top: 0.5rem;
+  color: var(--muted, #555);
+  font-size: 14px;
 }
