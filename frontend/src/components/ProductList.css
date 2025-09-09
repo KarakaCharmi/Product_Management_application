@@ -1,0 +1,118 @@
+/* ------------------------------
+   Products List Grid
+------------------------------ */
+.products-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  /* Preserve grid width and prevent shifting */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ------------------------------
+   Loader / Spinner
+------------------------------ */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #60a5fa;
+  border-radius: 50%;
+  margin: 2rem auto;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------
+   Empty State
+------------------------------ */
+.empty {
+  text-align: center;
+  padding: 2rem;
+  min-height: 200px; /* prevent layout jump */
+}
+
+.empty-emoji {
+  font-size: 42px;
+  margin-bottom: 0.5rem;
+}
+
+.empty h3 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.empty p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ------------------------------
+   Skeleton Cards
+------------------------------ */
+.skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.skeleton .card-media {
+  background: #eef1f5;
+  border-radius: 10px;
+  height: 140px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+.sk-line {
+  height: 14px;
+  background: #eef1f5;
+  border-radius: 8px;
+  margin: 0.4rem 0;
+}
+
+.sk-line.sm {
+  height: 10px;
+  width: 70%;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ------------------------------
+   Responsive tweaks
+------------------------------ */
+@media (max-width: 640px) {
+  .products-list,
+  .skeleton {
+    grid-template-columns: 1fr;
+  }
+}

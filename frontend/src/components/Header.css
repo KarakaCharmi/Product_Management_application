@@ -1,0 +1,68 @@
+.header {
+    position: static;
+    padding: 1.25rem 0 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .header-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #eff6ff, #fdf2f8);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(2, 6, 23, 0.06);
+    overflow: hidden;
+  }
+  
+  /* Optional background pattern image */
+  .header-inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/dot-grid.png');
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  
+  .header h1 {
+    font-size: 26px;
+    letter-spacing: 0.2px;
+  }
+  
+  .header .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  
+  .badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(
+      100% 100% at 30% 20%,
+      #93c5fd 0%,
+      #60a5fa 35%,
+      #f472b6 100%
+    );
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.12);
+  }
+  
+  .badge svg {
+    color: #0b1220;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+  }
+  
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 0.2rem;
+  }
+  
