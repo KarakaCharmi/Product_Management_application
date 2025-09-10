@@ -1,0 +1,15 @@
+.recent-products {
+  margin-bottom: 2rem;
+}
+
+.recent-products h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.recent-products-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}

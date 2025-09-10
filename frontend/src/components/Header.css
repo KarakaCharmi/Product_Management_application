@@ -1,68 +1,170 @@
 .header {
-    position: static;
-    padding: 1.25rem 0 1rem;
+  position: relative;
+  background-image: url("https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1400&q=80");
+  background-size: cover;
+  background-position: center;
+  border-radius: 0 0 12px 12px;
+  margin-bottom: 2rem;
+  color: white;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55); /* dark overlay for readability */
+}
+
+.header-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo-badge svg {
+  width: 28px;
+  height: 28px;
+  color: #ffdd57; /* golden-yellow highlight for the icon */
+}
+
+.brand-text h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-top: 0.25rem;
+}
+/* Tabs container */
+/* Tabs container */
+.nav-tabs {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-left: auto; /* push tabs to the right */
+}
+
+/* NavLink (tab) base style */
+.nav-tabs a {
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ddd;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.nav-tabs a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Active tab (NavLink adds .active) */
+.nav-tabs a.active {
+  background: #fff;
+  color: #333;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+@media (max-width: 992px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .brand {
     margin-bottom: 1rem;
   }
-  
-  .header-inner {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #eff6ff, #fdf2f8);
-    border: 1px solid var(--border);
-    padding: 1rem;
-    border-radius: 14px;
-    box-shadow: 0 6px 20px rgba(2, 6, 23, 0.06);
-    overflow: hidden;
+
+  .brand-text h1 {
+    font-size: 1.5rem;
   }
-  
-  /* Optional background pattern image */
-  .header-inner::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/dot-grid.png');
-    background-size: 200px 200px;
-    background-repeat: repeat;
-    opacity: 0.18;
-    pointer-events: none;
+
+  .subtitle {
+    font-size: 0.9rem;
   }
-  
-  .header h1 {
-    font-size: 26px;
-    letter-spacing: 0.2px;
+
+  .nav-tabs {
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
-  
-  .header .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+
+  .nav-tabs a {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
   }
-  
-  .badge {
+}
+
+/* Mobiles (≤ 600px) */
+@media (max-width: 600px) {
+  .header {
+    padding: 1.5rem 1rem;
+  }
+
+  .brand-text h1 {
+    font-size: 1.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+  }
+
+  .logo-badge {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: radial-gradient(
-      100% 100% at 30% 20%,
-      #93c5fd 0%,
-      #60a5fa 35%,
-      #f472b6 100%
-    );
-    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.12);
   }
-  
-  .badge svg {
-    color: #0b1220;
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+
+  .logo-badge svg {
+    width: 22px;
+    height: 22px;
   }
-  
-  .subtitle {
-    color: var(--muted);
-    font-size: 14px;
-    margin-top: 0.2rem;
+
+  .nav-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none; /* hide scrollbar in Firefox */
   }
-  
+  .nav-tabs::-webkit-scrollbar {
+    display: none; /* hide scrollbar in Chrome/Safari */
+  }
+
+  .nav-tabs a {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+    white-space: nowrap;
+  }
+}

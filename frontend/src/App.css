@@ -206,37 +206,61 @@ body {
   margin: 1rem 0;
 }
 
+/* ------------------------------
+   Search Box
+------------------------------ */
 .searchbox {
   position: relative;
   display: flex;
   align-items: center;
   flex: 3;
+
+  background: #f9fafb;            /* subtle gray bg */
+  border: 1px solid #d1d5db;      /* soft border */
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.searchbox:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.searchbox:focus-within {
+  background: #fff;
+  border-color: #3b82f6; /* blue border */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .search-icon {
   position: absolute;
   left: 12px;
-  color: var(--muted);
+  color: #6b7280; /* neutral gray */
 }
 
 .search-input {
   width: 100%;
   padding: 0.6rem 1rem 0.6rem 36px;
-  border: 1px solid var(--border);
+  border: none;                  /* remove inner border */
   border-radius: 10px;
-  background: #fff;
+  background: transparent;
+  font-size: 1rem;
+  color: #111827;
 }
 
-.searchbox-button {
-  position: absolute;
-  right: 6px;
-  padding: 0.45rem 0.8rem;
-  border: 1px solid #bfdbfe;
-  background: #dbeafe;
-  color: #1e40af;
-  border-radius: 8px;
+.search-input:focus {
+  outline: none;
+}
+
+/* Remove default clear (X) background in input */
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
   cursor: pointer;
 }
+.searchbox-button { position: absolute; right:0px; padding: 0.3rem 0.6rem; color: #1e40af; border-radius: 8px; border:1px solid #fff; background:#fff; cursor: pointer; }
 
 /* ------------------------------
    Sort Dropdown
@@ -248,14 +272,30 @@ body {
 
 .sort-select select {
   min-width: 200px;
-  padding-right: 34px; /* space for icon */
+  padding-right: 34px; /* space for caret */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  border: 1px solid var(--border);
+
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
   border-radius: 10px;
   padding: 0.6rem 1rem;
+  font-size: 1rem;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.sort-select select:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.sort-select select:focus {
   background: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
 }
 
 .select-caret {
@@ -264,7 +304,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: var(--muted);
+  color: #6b7280; /* neutral gray */
 }
 /* Empty State */
 .products-list .empty {
@@ -313,3 +353,86 @@ body {
   background-color: #1d4ed8;
 }
 
+/* ============================
+   MEDIA QUERIES
+=============================== */
+
+/* Large desktops */
+@media (min-width: 1440px) {
+  #root {
+    max-width: 1320px;
+  }
+}
+
+/* Tablets (≤ 992px) */
+@media (max-width: 992px) {
+  #root {
+    padding: 1.5rem;
+  }
+
+  .toolbar.panel {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .toolbar.panel input {
+    min-width: 220px;
+    flex: 1;
+  }
+
+  .toolbar.panel select {
+    min-width: 160px;
+  }
+
+  .products-list {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .modal {
+    max-width: 480px;
+  }
+}
+
+/* Mobiles (≤ 600px) */
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+    margin: 0 auto 2rem;
+  }
+
+  .toolbar.panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar.panel input,
+  .toolbar.panel select {
+    min-width: 100%;
+  }
+
+  .searchbox {
+    flex: 1;
+  }
+
+  .products-list {
+    grid-template-columns: 1fr; /* single column */
+  }
+
+  .modal {
+    max-width: 90%;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .products-list .empty h3 {
+    font-size: 18px;
+  }
+
+  .products-list .empty p {
+    font-size: 13px;
+  }
+}

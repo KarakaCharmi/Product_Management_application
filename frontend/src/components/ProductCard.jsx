@@ -40,13 +40,17 @@ export default function ProductCard({ product, onDelete, onEdit }) {
   }, [product]);
 
   function badgeClass(category) {
-    const c = String(category || '').toLowerCase();
-    if (c.includes('Food') || c.includes('grocery')) return 'category-badge green';
-    if (c.includes('Electronics')) return 'category-badge amber';
-    if (c.includes('Sports & Outdoors')) return 'category-badge pink';
-	if (c.includes('fashion')) return 'category-badge purple';
-    return 'category-badge';
-  }
+  const c = String(category || '').toLowerCase(); // all lowercase
+  if (c.includes('food') || c.includes('grocery')) return 'category-badge green';
+  if (c.includes('electronics')) return 'category-badge gray';
+  if (c.includes('sports & outdoors')) return 'category-badge pink';
+  if (c.includes('fashion')) return 'category-badge purple';
+  if (c.includes('health & beauty')) return 'category-badge red';
+  if (c.includes('toys & games')) return 'category-badge orange';
+  if (c.includes('home & kitchen')) return 'category-badge yellow';
+  return 'category-badge teal';
+}
+
 
   function currency(value) {
     try { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(Number(value || 0)) } 
@@ -55,18 +59,32 @@ export default function ProductCard({ product, onDelete, onEdit }) {
 
   return (
     <div className="card" style={{ transition: 'transform .12s ease, box-shadow .12s ease' }}>
-      <div className="card-media">
-        {img ? <img src={img} alt={product.name} /> : <div className="skeleton"></div>}
-        {product.category && <span className={badgeClass(product.category)}>{product.category}</span>}
-      </div>
+     <div className="card-media">
+  {img ? (
+    <img src={img} alt={product.name} className="card-img" />
+  ) : (
+    <div className="skeleton shimmer"></div>
+  )}
+  
+  {product.category && (
+    <span className={`category-badge ${badgeClass(product.category)}`}>
+      {product.category}
+    </span>
+  )}
+
+  {/* Optional: overlay gradient for better text readability */}
+  <div className="card-overlay" />
+</div>
+
       <div className="card-body">
         <div className="card-title">{product.name}</div>
         <div className="card-price">{currency(product.price)}</div>
         <div className="card-desc">{product.description}</div>
         <div className="card-actions">
+			{onDelete && (
           <button className="btn-delete" onClick={() => onDelete(product._id)}>
             <Trash2 size={16} /> <span>Delete</span>
-          </button>
+          </button>)}
 
           {onEdit && (
             <button className="btn-edit" onClick={() => onEdit(product)}>

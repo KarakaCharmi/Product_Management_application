@@ -1,58 +1,78 @@
-import { Router } from "express";
+import express from "express";
 import Product from "../models/Product.js";
 
-const router = Router();
+const router = express.Router();
 
+// GET all products (optionally sort by price)
 router.get("/", async (req, res) => {
-	try {
-		const { q, sort } = req.query;
-		const filter = q ? { name: { $regex: String(q), $options: "i" } } : {};
-		const sortSpec = sort === "asc" ? { price: 1 } : sort === "desc" ? { price: -1 } : { createdAt: -1 };
-		const products = await Product.find(filter).sort(sortSpec);
-		res.json(products);
-	} catch (err) {
-		res.status(500).json({ message: "server error" });
-	}
+  try {
+    const { sort, search } = req.query;
+
+    let query = {};
+    if (search) {
+      query.name = { $regex: search, $options: "i" }; 
+    }
+
+    let products = Product.find(query);
+
+    if (sort === "price-asc") products = products.sort({ price: 1 });
+    else if (sort === "price-desc") products = products.sort({ price: -1 });
+
+    const result = await products;
+    res.json(result); // <-- always return array
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
 });
 
-router.post("/", async (req, res) => {
-	try {
-		const { name, price, description, category } = req.body;
-		if (!name || price == null) return res.status(400).json({ message: "name and price required" });
-		const created = await Product.create({ name, price, description, category });
-		res.status(201).json(created);
-	} catch (err) {
-		res.status(500).json({ message: "server error" });
-	}
-});
 
+
+// ✅ PUT update product
 router.put("/:id", async (req, res) => {
-	try {
-		const { id } = req.params;
-		const { name, price, description, category } = req.body;
-		const updated = await Product.findByIdAndUpdate(
-			id,
-			{ name, price, description, category },
-			{ new: true, runValidators: true }
-		);
-		if (!updated) return res.status(404).json({ message: "not found" });
-		res.json(updated);
-	} catch (err) {
-		res.status(400).json({ message: "update failed" });
-	}
+  try {
+    const { name, price, description, category } = req.body;
+
+    if (!name || !price) {
+      return res.status(400).json({ error: "Name and Price are required" });
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      { name, price, description, category },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update product" });
+  }
 });
 
+// POST new product
+router.post("/", async (req, res) => {
+  try {
+    const { name, price, description, category } = req.body;
+    const newProduct = new Product({ name, price, description, category });
+    await newProduct.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// DELETE product
 router.delete("/:id", async (req, res) => {
-	try {
-		const { id } = req.params;
-		const deleted = await Product.findByIdAndDelete(id);
-		if (!deleted) return res.status(404).json({ message: "not found" });
-		res.json({ message: "deleted" });
-	} catch (err) {
-		res.status(400).json({ message: "delete failed" });
-	}
+  try {
+    const deleted = await Product.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Product not found" });
+    res.json({ message: "Product deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 export default router;
-
-
