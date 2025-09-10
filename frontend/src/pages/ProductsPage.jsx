@@ -12,8 +12,9 @@ export default function ProductsPage() {
   const [sort, setSort] = useState("")
   const [editingProduct, setEditingProduct] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [confirmDelete, setConfirmDelete] = useState({ open: false, productId: null })
+  const [toast, setToast] = useState({ message: "", type: "" }) 
 
-  // Fetch products from API
   const fetchProducts = useCallback(async () => {
     setLoading(true)
     try {
@@ -45,24 +46,43 @@ export default function ProductsPage() {
       })
       handleClose()
       fetchProducts()
+      showToast(" Product updated successfully!", "success")
     } catch (err) {
       console.error("❌ Failed to update product:", err)
+      showToast(" Failed to update product", "error")
     }
   }
 
-  const deleteProduct = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return
+  const confirmDeleteProduct = (id) => {
+    setConfirmDelete({ open: true, productId: id })
+  }
+
+  const handleDelete = async () => {
     try {
-      await fetch(`${API_URL}/${id}`, { method: "DELETE" })
+      await fetch(`${API_URL}/${confirmDelete.productId}`, { method: "DELETE" })
       fetchProducts()
+      showToast(" Product deleted successfully!", "success")
     } catch (err) {
       console.error("❌ Failed to delete product:", err)
+      showToast(" Failed to delete product", "error")
+    } finally {
+      setConfirmDelete({ open: false, productId: null })
     }
+  }
+
+  const showToast = (message, type) => {
+    setToast({ message, type })
+    setTimeout(() => setToast({ message: "", type: "" }), 3000) // hide after 3s
   }
 
   return (
     <div className="products-page">
-      {/* Controls: Search + Sort */}
+      {toast.message && (
+        <div className={`toast ${toast.type}`}>
+          {toast.message}
+        </div>
+      )}
+
       <div className="controls">
         <div className="searchbar">
           <div className="searchbox">
@@ -96,7 +116,6 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Product List */}
       <div className="products-list">
         {loading ? (
           <div className="skeleton">
@@ -115,7 +134,7 @@ export default function ProductsPage() {
             <ProductCard
               key={p._id}
               product={p}
-              onDelete={deleteProduct}
+              onDelete={() => confirmDeleteProduct(p._id)}
               onEdit={handleEdit}
             />
           ))
@@ -128,13 +147,29 @@ export default function ProductsPage() {
         )}
       </div>
 
-      {/* Edit Modal */}
       {editingProduct && (
         <EditModal
           product={editingProduct}
           onClose={handleClose}
           onSave={updateProduct}
         />
+      )}
+
+      {confirmDelete.open && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Confirm Delete</h3>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to delete this product?</p>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+                <button onClick={handleDelete} style={{ background: "#dc2626", color: "#fff", padding: "0.5rem 1rem", borderRadius: "8px", border: "none" }}>Yes</button>
+                <button onClick={() => setConfirmDelete({ open: false, productId: null })} style={{ padding: "0.5rem 1rem", borderRadius: "8px" }}>No</button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

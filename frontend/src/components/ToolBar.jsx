@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { Search as LucideSearch, ChevronDown as LucideChevronDown } from "lucide-react";
-import "./Toolbar.css";
 
-// Safe wrappers for Lucide icons to avoid StrictMode destroy issues
 function SafeSearch(props) {
   useEffect(() => () => {}, []);
   return <LucideSearch {...props} />;
@@ -14,7 +12,6 @@ function SafeChevronDown(props) {
 }
 
 export default function Toolbar({ query, sort, onSearch, onSortChange }) {
-  // Enter key triggers search
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -22,7 +19,6 @@ export default function Toolbar({ query, sort, onSearch, onSortChange }) {
     }
   };
 
-  // Sort select change
   const handleSortChange = (e) => {
     e.preventDefault();
     onSortChange?.(e.target.value);
@@ -30,7 +26,6 @@ export default function Toolbar({ query, sort, onSearch, onSortChange }) {
 
   return (
     <div className="searchbar">
-      {/* Search Box */}
       <div className="searchbox">
         <SafeSearch className="search-icon" size={18} />
         <input
@@ -42,8 +37,6 @@ export default function Toolbar({ query, sort, onSearch, onSortChange }) {
           onKeyDown={handleKeyDown}
         />
       </div>
-
-      {/* Sort Select */}
       <div className="sort-select">
         <select value={sort} onChange={handleSortChange}>
           <option value="">Sort by price</option>

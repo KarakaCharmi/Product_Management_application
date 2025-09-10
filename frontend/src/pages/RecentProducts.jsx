@@ -2,9 +2,7 @@ import ProductCard from "../components/ProductCard"
 import './RecentProducts.css'
 
 export default function RecentProducts({ products }) {
-  // Get last 2 products, most recent first
   const recentProducts = products.slice(-2).reverse()
-
   return (
     <section className="recent-products">
       <h3>Recently Added Products</h3>

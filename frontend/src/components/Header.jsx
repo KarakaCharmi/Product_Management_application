@@ -17,8 +17,6 @@ export default function Header() {
             <p className="subtitle">Easily manage your product catalog</p>
           </div>
         </div>
-
-        {/* Navbar Tabs with Routing */}
         <nav className="nav-tabs">
           <NavLink 
             to="/products" 

@@ -29,15 +29,10 @@ export default function AddProductForm({ onCreate }) {
       }
       await onCreate(newProduct)
       setForm({ name: '', price: '', description: '', category: '' })
-
-      // Show toast
       setToast('Product added successfully!')
-
-      // Keep toast and loading visible for ~2s
       await new Promise(resolve => setTimeout(resolve, 2000))
 
-      setToast(null)      // hide toast
-    //   navigate('/products') // navigate after toast
+      setToast(null)     
     } catch (err) {
       console.error('Failed to add product:', err)
       setToast('Failed to add product')

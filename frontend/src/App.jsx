@@ -8,8 +8,6 @@ const API_URL = "http://localhost:5000/api/products"
 
 export default function App() {
   const [products, setProducts] = useState([])
-
-  // Fetch products on mount
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -22,8 +20,6 @@ export default function App() {
     }
     fetchProducts()
   }, [])
-
-  // Add new product and update products state
   const addProduct = async (product) => {
     const res = await fetch(API_URL, {
       method: "POST",
@@ -31,7 +27,7 @@ export default function App() {
       body: JSON.stringify(product),
     })
     const newProduct = await res.json()
-    setProducts((prev) => [...prev, newProduct]) // append new product
+    setProducts((prev) => [...prev, newProduct]) 
     return newProduct
   }
 

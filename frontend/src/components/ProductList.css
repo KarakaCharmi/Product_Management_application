@@ -26,10 +26,6 @@
     transform: rotate(360deg);
   }
 }
-
-/* ------------------------------
-   Empty State
------------------------------- */
 .empty {
   text-align: center;
   padding: 2rem;
@@ -39,10 +35,6 @@
   font-size: 42px;
   margin-bottom: 0.5rem;
 }
-
-/* ------------------------------
-   Skeleton Cards
------------------------------- */
 .skeleton .card-media {
   background: #eef1f5;
 }
@@ -83,17 +75,15 @@
     transform: translateX(100%);
   }
 }
-/* Parent wrapper for ProductList */
 .products-list-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* vertical centering */
-  min-height: 60vh; /* adjust as needed */
+  justify-content: center; 
+  min-height: 60vh; 
   width: 100%;
 }
 
-/* Empty state */
 .empty.panel {
   display: flex;
   flex-direction: column;
@@ -105,28 +95,22 @@
   border-radius: 12px;
   border: 1px solid var(--border, #e0e0e0);
   width: 100%;
-  max-width: 400px; /* optional: keeps panel compact */
+  max-width: 400px; 
 }
-
-/* Emoji */
 .empty-emoji {
   font-size: 50px;
   margin-bottom: 1rem;
 }
-
-/* Title */
 .empty h3 {
   font-size: 20px;
   margin-bottom: 0.5rem;
 }
 
-/* Description */
 .empty p {
   color: var(--muted, #555);
   font-size: 14px;
 }
 
-/* Loader */
 .loader-wrapper {
   display: flex;
   flex-direction: column;

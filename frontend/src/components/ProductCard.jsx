@@ -2,8 +2,7 @@ import './ProductCard.css';
 import { Trash2, Edit3 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-// Replace with your Unsplash Access Key
-const UNSPLASH_ACCESS_KEY = "8v5Az49kl8pzLMgcrfi3PuFOu2nLz2e-ylySHq8VXns";
+const UNSPLASH_ACCESS_KEY =import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
 
 export default function ProductCard({ product, onDelete, onEdit }) {
   const [img, setImg] = useState("");
@@ -11,13 +10,10 @@ export default function ProductCard({ product, onDelete, onEdit }) {
   useEffect(() => {
     async function fetchImage() {
       try {
-        // If product has uploaded image, use it
         if (product.imageUrl) {
           setImg(product.imageUrl);
           return;
         }
-
-        // Search query: product name or category
         const query = encodeURIComponent(product.name || product.category || "product");
 
         const response = await fetch(
@@ -72,7 +68,7 @@ export default function ProductCard({ product, onDelete, onEdit }) {
     </span>
   )}
 
-  {/* Optional: overlay gradient for better text readability */}
+
   <div className="card-overlay" />
 </div>
 
